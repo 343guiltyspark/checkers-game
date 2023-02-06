@@ -107,20 +107,28 @@ export class Board {
       }
 
       
-      getValidEndSquares(startSquare: Square): Square[][] {
+      getValidEndSquares(startSquare: Square) : Square[][] {
         const validEndSquares = [];
+        console.log(startSquare)
         const playerColor = startSquare.state === SquareState.BlackPiece || startSquare.state === SquareState.BlackKing ? 'Black' : 'White';
         const direction = playerColor === 'Black' ? 1 : -1;
         const potentialEndSquares = [    [startSquare.x + direction, startSquare.y + 1],
           [startSquare.x + direction, startSquare.y - 1],
         ];
+
+        console.log(potentialEndSquares)
         for (const potentialEndSquare of potentialEndSquares) {
           if (potentialEndSquare[0] >= 0 && potentialEndSquare[0] < 8 && potentialEndSquare[1] >= 0 && potentialEndSquare[1] < 8) {
+           
+            console.log("Loop 1")
+            console.log(potentialEndSquare)
             if (this.squares[potentialEndSquare[0]][potentialEndSquare[1]].state === SquareState.Empty) {
-                validEndSquares.push(this.squares[potentialEndSquare[0]][potentialEndSquare[1]]);
+               validEndSquares.push(this.squares[potentialEndSquare[0]][potentialEndSquare[1]]);
             }
           }
         }
+        console.log("Valid End Squares");
+        console.log(validEndSquares)
         return validEndSquares;
       }
       

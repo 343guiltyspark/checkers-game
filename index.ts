@@ -4,18 +4,19 @@ import { Square } from './checkers';
 import { Board } from './checkers';
 import { Simulation } from './simulation';
 
-let testRuns = 1
+let testRuns = 10
 
 
 const board = new Board();
 console.log(board.squares);
-const checkers = new Simulation();
+const checkers = new Simulation(board);
 
 let valids = 0;
 
 for(var ee = 0; ee < testRuns ; ee++){
     
-    const move = checkers.getMove();
+    console.log(checkers.firstPlayer)
+    const move = checkers.getMove(checkers.firstPlayer);
     console.log(move);
 
    let valid = board.isMoveValid(board.squares,move[0],move[1],move[2],move[3]);
