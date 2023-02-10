@@ -5,6 +5,14 @@ export enum SquareState {
     BlackKing,
     WhiteKing
   }
+
+export enum invalidMoves {
+  Empty_Starting_Square,
+  Occupied_Landing_Square,
+  Non_diagnal_move,
+  Black_Piece_Wrong_Direction,
+  White_Piece_Wrong_Direction
+}
   
 export class Square {
     state: SquareState;
@@ -20,9 +28,11 @@ export class Square {
   
 export class Board {
     squares: Square[][];
+    invalidMoves : [number,number,number,number,number] ;
   
     constructor() {
       this.squares = [];
+      this.invalidMoves  = [0,0,0,0,0]
       for (let i = 0; i < 8; i++) {
         this.squares[i] = [];
         for (let j = 0; j < 8; j++) {
@@ -42,6 +52,7 @@ export class Board {
     isMoveValid(board: Square[][], startRow: number, startCol: number, endRow: number, endCol: number): boolean {
         // Check if the starting square is occupied by a piece of the correct color
         if (board[startRow][startCol].state !== SquareState.BlackPiece && board[startRow][startCol].state !== SquareState.WhitePiece) {
+          this.invalidMoves[0]++
           console.log('Starting square is not occupied by a piece.');
           return false;
         }
@@ -49,23 +60,27 @@ export class Board {
         // Check if the ending square is not occupied
         if (board[endRow][endCol].state !== SquareState.Empty) {
           console.log('Ending square is already occupied.');
+          this.invalidMoves[1]++
           return false;
         }
       
         // Check if the move is a diagonal move
         if (Math.abs(startRow - endRow) !== Math.abs(startCol - endCol)) {
+          this.invalidMoves[2]++
           console.log('Move is not a diagonal move.');
           return false;
         }
       
         // Check if the piece is moving in the correct direction
         if (board[startRow][startCol].state === SquareState.BlackPiece) {
-          if (endRow > startRow) {
+          if (endRow < startRow) {
+            this.invalidMoves[3]++
             console.log('Black piece must move in the opposite direction.');
             return false;
           }
         } else if (board[startRow][startCol].state === SquareState.WhitePiece) {
-          if (endRow < startRow) {
+          if (endRow > startRow) {
+            this.invalidMoves[4]++
             console.log('White piece must move in the opposite direction.');
             return false;
           }
@@ -107,11 +122,11 @@ export class Board {
       }
 
       
-      getValidEndSquares(startSquare: Square) : Square[][] {
+      getValidEndSquares(startSquare: Square) : Square[] {
         const validEndSquares = [];
         console.log(startSquare)
         const playerColor = startSquare.state === SquareState.BlackPiece || startSquare.state === SquareState.BlackKing ? 'Black' : 'White';
-        const direction = playerColor === 'Black' ? 1 : -1;
+        const direction = playerColor === 'Black' ? 1: -1;
         const potentialEndSquares = [    [startSquare.x + direction, startSquare.y + 1],
           [startSquare.x + direction, startSquare.y - 1],
         ];

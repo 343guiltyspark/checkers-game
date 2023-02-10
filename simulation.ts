@@ -18,27 +18,31 @@ export class Simulation {
       
     }
   
-    getMove(player : string): [number, number, number, number] {
+    getMove(player: string): [number, number, number, number] {
       const occupiedSquares = this.board.getOccupiedSquares(player);
-
-        console.log(occupiedSquares)
+      console.log(occupiedSquares);
+    
       const randomIndex = Math.floor(Math.random() * occupiedSquares.length);
       const startSquare = occupiedSquares[randomIndex];
+      console.log("Start Square");
       console.log(startSquare);
-      this.startRow = startSquare[0];
-      this.startCol = startSquare[1];
-
-     // this.startSquare = new Square(this.startRow,this.startCol,player === 'Black' ? SquareState.BlackPiece : SquareState.WhitePiece)
-     
+      this.startRow = startSquare.x;
+      this.startCol = startSquare.y;
+    
       const validEndSquares = this.board.getValidEndSquares(startSquare);
-      console.log("Start  Squares")
-      console.log(validEndSquares)
+      console.log("Start Squares");
+      console.log(validEndSquares);
+    
+      if (validEndSquares.length === 0) {
+        console.log("No valid end squares found, returning [-1, -1, -1, -1]");
+        return [-1, -1, -1, -1];
+      }
+    
       const randomEndIndex = Math.floor(Math.random() * validEndSquares.length);
       const endSquare = validEndSquares[randomEndIndex];
-      console.log("End Squares")
-      console.log(endSquare)
-      
-  
-      return [this.startRow, this.startCol, endSquare[0].x, endSquare[0].y];
+      console.log("End Squares");
+      console.log(endSquare);
+    
+      return [this.startRow, this.startCol, endSquare.x, endSquare.y];
     }
   }
